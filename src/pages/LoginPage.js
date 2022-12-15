@@ -1,17 +1,44 @@
+import axios from 'axios';
+import { useContext, useState } from 'react';
+import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/Logo.png';
+import { AuthContext } from '../AuthContext';
 
 export default function LoginPage() {
+  const {setImage, setToken} = useContext(AuthContext)
   const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isClicked, setIsClicked] = useState(false)
+
+  function login(e) {
+    e.preventDefault()
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login'
+    const body = { email, password }
+    setIsClicked(true)
+
+    const promise = axios.post(URL, body)
+    promise.then(res => {
+      setIsClicked(false)
+      setImage(res.data.image)
+      setToken(res.data.token)
+      navigate('/hoje')
+    })
+    promise.catch(err => {
+      alert(err.response.data.message)
+      setIsClicked(false)
+    })
+  }
 
 	return (
-		<Container>
+		<Container onSubmit={login}>
 			<img src={logo} alt=''/>
       <form>
-        <InputLogin type='email' placeholder='email' required/>
-        <InputLogin type='password' placeholder='senha' required/>
-        <LoginButton type='submit'>Entrar</LoginButton>
+        <InputLogin value={email} onChange={e => setEmail(e.target.value)} type='email' placeholder='email' required disabled={isClicked}/>
+        <InputLogin value={password} onChange={e => setPassword(e.target.value)} type='password' placeholder='senha' required disabled={isClicked}/>
+        <LoginButton clicked={isClicked} type='submit' disabled={isClicked}>{isClicked ? <ThreeDots color='#FFFFFF'/> : 'Entrar'}</LoginButton>
       </form>
       <p onClick={() => navigate('/cadastro')}>Não tem uma conta? Cadastre-se!</p>
 		</Container>
@@ -61,6 +88,7 @@ const LoginButton = styled.button`
   border-radius: 5px;
   background-color: #52B6FF;
   color: #FFFFFF;
+  opacity: ${props => props.clicked ? '0.7' : '1'};
   font-family: 'Lexend Deca', sans-serif;
   font-size: 21px;
   display: flex;
@@ -69,4 +97,4 @@ const LoginButton = styled.button`
   cursor: pointer;
 `
 
-export {Container, InputLogin, LoginButton}
+export {Container, InputLogin}
