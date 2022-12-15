@@ -7,7 +7,7 @@ export default function LoginPage() {
 
 	return (
 		<Container>
-			<img src={logo} />
+			<img src={logo} alt=''/>
       <form>
         <InputLogin type='email' placeholder='email' required/>
         <InputLogin type='password' placeholder='senha' required/>
@@ -63,6 +63,9 @@ const LoginButton = styled.button`
   color: #FFFFFF;
   font-family: 'Lexend Deca', sans-serif;
   font-size: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 `
 
