@@ -16,8 +16,10 @@ export default function CreatedHabits({habit, habitDelete, setHabitDelete}) {
       }
     }
 
-    const promise = axios.delete(URL, config)
-    promise.then(() => setHabitDelete(!habitDelete))
+    if(window.confirm('Você tem certeza que quer apagar esse hábito?')) {
+      const promise = axios.delete(URL, config)
+      promise.then(() => setHabitDelete(!habitDelete))
+    }
   }
 
 	return (
@@ -25,7 +27,7 @@ export default function CreatedHabits({habit, habitDelete, setHabitDelete}) {
 			<p>{habit.name}</p>
 			<div>
 				{weekdays.map((w, index) => (
-					<button key={index}>{w[0]}</button>
+          habit.days.includes(index) ? <DaysButton key={index} selected={true}>{w[0]}</DaysButton> : <DaysButton key={index} selected={false}>{w[0]}</DaysButton>
 				))}
 			</div>
 			<img src={trash} alt="" onClick={deleteHabit}/>
@@ -50,17 +52,6 @@ const CreatedHabitsStyled = styled.div`
   div{
     margin-left: 14px;
     margin-top: 8px;
-    button{
-      font-family: 'Lexend Deca', sans-serif;
-      margin-right: 4px;
-      width: 30px;
-      height: 30px;
-      border: 1px solid #D5D5D5;
-      border-radius: 5px;
-      background-color: #FFFFFF;
-      color: #DBDBDB;
-      font-size: 20px;
-    }
   }
   img{
     position: absolute;
@@ -68,4 +59,16 @@ const CreatedHabitsStyled = styled.div`
     right: 10px;
     cursor: pointer;
   }
+`
+
+const DaysButton = styled.button`
+  font-family: 'Lexend Deca', sans-serif;
+  margin-right: 4px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #D5D5D5;
+  border-radius: 5px;
+  background-color: ${props => props.selected === true ? '#CFCFCF' : '#FFFFFF'};
+  color: ${props => props.selected === true ? '#FFFFFF' : '#DBDBDB'};
+  font-size: 20px;
 `
