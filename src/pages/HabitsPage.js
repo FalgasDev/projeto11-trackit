@@ -1,14 +1,53 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import styled from "styled-components"
 import FooterMenu from "../components/FooterMenu"
 import Header from "../components/Header"
 import { weekdays } from "../constants/weekdays"
-import trash from "../assets/Trash.png"
+import axios from "axios"
+import { AuthContext } from "../AuthContext"
+import { ThreeDots } from "react-loader-spinner"
+import CreatedHabits from "../components/CreatedHabits"
 
 export default function HabitsPage() {
   const [clickCreate, setClickCreate] = useState(false)
   const [name, setName] = useState('')
   const [days, setDays] = useState([])
+  const {token} = useContext(AuthContext)
+  const [isDisabled, setIsDisabled] = useState(false)
+
+  function selectDays(req) {
+    if (!days.some((props) => props === req)) {
+      const newDays = [...days, req]
+      setDays(newDays)
+    } else {
+      const removeDays = days.filter((props) => props !== req)
+      setDays(removeDays)
+    }
+  }
+
+  function createHabit() {
+    setIsDisabled(true)
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
+    const body = {name, days}
+    const config = {
+      headers: {
+        Authorization : `Bearer ${token}`
+      }
+    }
+
+    const promise = axios.post(URL, body, config)
+    promise.then((res) => {
+      setIsDisabled(false)
+      setName('')
+      setDays([])
+      setClickCreate(false)
+      console.log(res)
+    })
+    promise.catch((err) => {
+      alert(err.response.data)
+      setIsDisabled(false)
+    })
+  }
 
   return (
     <ContainerHabits>
@@ -17,21 +56,15 @@ export default function HabitsPage() {
         <h1>Meus hábitos</h1>
         <button onClick={() => setClickCreate(true)}>+</button>
       </MyHabits>
-      <CreateHabit isClick={clickCreate}>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="nome do hábito"/>
+      <CreateHabit isClick={clickCreate} isDisabled={isDisabled}>
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="nome do hábito" disabled={isDisabled}/>
         <div>
-          {weekdays.map((w, index) => <button key={index}>{w[0]}</button>)}
+          {weekdays.map((w, index) => <WeekdaysButton key={index} days={days} index={index} onClick={() => selectDays(index)} disabled={isDisabled}>{w[0]}</WeekdaysButton>)}
         </div>
         <p onClick={() => setClickCreate(false)}>Cancelar</p>
-        <button>Salvar</button>
+        <button onClick={createHabit} disabled={isDisabled}>{isDisabled ? <ThreeDots color='#FFFFFF' width='50px'/> : 'Salvar'}</button>
       </CreateHabit>
-      <CreatedHabits>
-        <p>Ler 1 capítulo de livro</p>
-        <div>
-          {weekdays.map((w, index) => <button key={index}>{w[0]}</button>)}
-        </div>
-        <img src={trash} alt=""/>
-      </CreatedHabits>
+      <CreatedHabits />
       <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
       <FooterMenu />
     </ContainerHabits>
@@ -101,17 +134,6 @@ const CreateHabit = styled.div`
   div{
     margin-left: 19px;
     margin-top: 8px;
-    button{
-      font-family: 'Lexend Deca', sans-serif;
-      margin-right: 4px;
-      width: 30px;
-      height: 30px;
-      border: 1px solid #D5D5D5;
-      border-radius: 5px;
-      background-color: #FFFFFF;
-      color: #DBDBDB;
-      font-size: 20px;
-    }
   }
   p{
     position: absolute;
@@ -131,44 +153,25 @@ const CreateHabit = styled.div`
     border-radius: 5px;
     border: none;
     background-color: #52B6FF;
+    opacity: ${props => props.isDisabled ? '0.7' : '1'};
     color: #FFFFFF;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: ${props => props.isDisabled ? '23px' : ''};
+    padding-bottom: ${props => props.isDisabled ? '8px' : ''};
   }
 `
 
-const CreatedHabits = styled.div`
-  width: 340px;
-  height: 91px;
-  background-color: #FFFFFF;
-  margin-top: 10px;
+const WeekdaysButton = styled.button`
+  font-family: 'Lexend Deca', sans-serif;
+  margin-right: 4px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #D5D5D5;
   border-radius: 5px;
-  position: relative;
-  p{
-    font-family: 'Lexend Deca', sans-serif;
-    font-size: 20px;
-    margin-left: 15px;
-    padding-top: 13px;
-    color: #666666;
-  }
-  div{
-    margin-left: 14px;
-    margin-top: 8px;
-    button{
-      font-family: 'Lexend Deca', sans-serif;
-      margin-right: 4px;
-      width: 30px;
-      height: 30px;
-      border: 1px solid #D5D5D5;
-      border-radius: 5px;
-      background-color: #FFFFFF;
-      color: #DBDBDB;
-      font-size: 20px;
-    }
-  }
-  img{
-    position: absolute;
-    top: 11px;
-    right: 10px;
-    cursor: pointer;
-  }
+  background-color: ${props => props.days.includes(props.index) ? '#CFCFCF' : '#FFFFFF'};
+  color: ${props => props.days.includes(props.index) ? '#FFFFFF' : '#DBDBDB'};
+  font-size: 20px;
 `
