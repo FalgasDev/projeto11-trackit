@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import FooterMenu from "../components/FooterMenu"
 import Header from "../components/Header"
@@ -14,6 +14,21 @@ export default function HabitsPage() {
   const [days, setDays] = useState([])
   const {token} = useContext(AuthContext)
   const [isDisabled, setIsDisabled] = useState(false)
+  const [habits, setHabits] = useState([])
+  const [habitDelete, setHabitDelete] = useState(false)
+
+  useEffect(() => {
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const promise = axios.get(URL, config)
+    promise.then(res => setHabits(res.data))
+    promise.catch(err => console.log(err.response.data.message))
+  }, [habits, habitDelete])
 
   function selectDays(req) {
     if (!days.some((props) => props === req)) {
@@ -36,12 +51,11 @@ export default function HabitsPage() {
     }
 
     const promise = axios.post(URL, body, config)
-    promise.then((res) => {
+    promise.then(() => {
       setIsDisabled(false)
       setName('')
       setDays([])
       setClickCreate(false)
-      console.log(res)
     })
     promise.catch((err) => {
       alert(err.response.data)
@@ -50,7 +64,7 @@ export default function HabitsPage() {
   }
 
   return (
-    <ContainerHabits>
+    <ContainerHabits habits={habits}>
       <Header />
       <MyHabits>
         <h1>Meus hábitos</h1>
@@ -64,8 +78,9 @@ export default function HabitsPage() {
         <p onClick={() => setClickCreate(false)}>Cancelar</p>
         <button onClick={createHabit} disabled={isDisabled}>{isDisabled ? <ThreeDots color='#FFFFFF' width='50px'/> : 'Salvar'}</button>
       </CreateHabit>
-      <CreatedHabits />
+      {habits.map(h => <CreatedHabits key={h.id} habit={h} habitDelete={habitDelete} setHabitDelete={setHabitDelete}/>)}
       <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+      <footer></footer>
       <FooterMenu />
     </ContainerHabits>
   )
@@ -78,11 +93,15 @@ const ContainerHabits = styled.div`
   padding-left: 17px;
   padding-right: 18px;
   > p{
+    display: ${props => props.habits.length !== 0 ? 'none' : ''};
     margin-top: 28px;
     font-family: 'Lexend Deca', sans-serif;
     font-size: 18px;
     line-height: 22px;
     color: #666666;
+  }
+  footer{
+    height: 120px;
   }
 `
 

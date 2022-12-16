@@ -1,17 +1,34 @@
 import styled from "styled-components";
 import { weekdays } from "../constants/weekdays";
 import trash from "../assets/Trash.png"
+import { useContext } from "react";
+import { AuthContext } from "../AuthContext";
+import axios from "axios";
 
-export default function CreatedHabits() {
+export default function CreatedHabits({habit, habitDelete, setHabitDelete}) {
+  const {token} = useContext(AuthContext)
+
+  function deleteHabit() {
+    const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const promise = axios.delete(URL, config)
+    promise.then(() => setHabitDelete(!habitDelete))
+  }
+
 	return (
 		<CreatedHabitsStyled>
-			<p>Ler 1 capítulo de livro</p>
+			<p>{habit.name}</p>
 			<div>
 				{weekdays.map((w, index) => (
 					<button key={index}>{w[0]}</button>
 				))}
 			</div>
-			<img src={trash} alt="" />
+			<img src={trash} alt="" onClick={deleteHabit}/>
 		</CreatedHabitsStyled>
 	);
 }

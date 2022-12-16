@@ -46,11 +46,14 @@ export default function LoginPage() {
 }
 
 const Container = styled.div`
+  background-color: #FFFFFF;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 68px;
   img {
+    margin-top: 68px;
     margin-bottom: 30px;
   }
   form {
