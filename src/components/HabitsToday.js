@@ -1,9 +1,12 @@
 import axios from "axios";
+import { useContext } from "react";
 import styled from "styled-components";
 import success from "../assets/Success.png"
+import { AuthContext } from "../AuthContext";
 
-export default function HabitsToday({habit, refresh, setRefresh}) {
+export default function HabitsToday({habit}) {
   const token = localStorage.getItem('Token')
+  const {refresh, setRefresh} = useContext(AuthContext)
 
   function check() {
     const URLcheck = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`

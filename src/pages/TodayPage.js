@@ -6,8 +6,9 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import { weekdays } from "../constants/weekdays";
 import 'dayjs/locale/pt-br'
 import HabitsToday from "../components/HabitsToday";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import axios from "axios";
+import { AuthContext } from "../AuthContext";
 
 export default function TodayPage() {
   dayjs.extend(updateLocale)
@@ -16,8 +17,9 @@ export default function TodayPage() {
   })
   const today = dayjs().locale('pt-br').format('dddd, DD/MM')
   const token = localStorage.getItem('Token')
-  const [habitsToday, setHabitsToday] = useState([])
-  const [refresh, setRefresh] = useState(false)
+  const {habitsToday, setHabitsToday, refresh} = useContext(AuthContext)
+  const totalHabits = habitsToday.length
+  const completedHabits = habitsToday.filter(h => h.done).length
 
   useEffect(() => {
     const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today'
@@ -34,11 +36,11 @@ export default function TodayPage() {
   }, [refresh])
 
   return (
-    <Container>
+    <Container completedHabits={completedHabits}>
       <Header />
       <h1>{today}</h1>
-      <p>Nenhum hábito concluído ainda</p>
-      {habitsToday.map(h => <HabitsToday key={h.id} habit={h} setRefresh={setRefresh} refresh={refresh}/>)}
+      {completedHabits === 0 ? <p>Nenhum hábito concluído ainda</p> : <p>{`${Math.round(completedHabits/totalHabits*100)}% dos hábitos concluídos`}</p>}
+      {habitsToday.map(h => <HabitsToday key={h.id} habit={h}/>)}
       <footer></footer>
       <FooterMenu />
     </Container>
@@ -59,7 +61,7 @@ const Container = styled.div`
   > p{
     font-family: 'Lexend Deca', sans-serif;
     font-size: 18px;
-    color: #BABABA;
+    color: ${props => props.completedHabits !== 0 ? '#8FC549' : '#BABABA'};
     margin-top: 5px;
     margin-bottom: 28px;
   }
