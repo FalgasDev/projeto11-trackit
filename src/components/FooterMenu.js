@@ -6,16 +6,16 @@ import { AuthContext } from '../AuthContext';
 
 export default function FooterMenu() {
 	const navigate = useNavigate();
-	const {habitsToday} = useContext(AuthContext)
-	const totalHabits = habitsToday.length
-	const completedHabits = habitsToday.filter(h => h.done).length
+	const { habitsToday } = useContext(AuthContext);
+	const totalHabits = habitsToday.length;
+	const completedHabits = habitsToday.filter((h) => h.done).length;
 
 	return (
 		<ContainerMenu>
 			<h2 onClick={() => navigate('/habitos')}>Hábitos</h2>
 			<div onClick={() => navigate('/hoje')}>
 				<CircularProgressbar
-					value={completedHabits/totalHabits*100}
+					value={totalHabits === 0 ? 0 : (completedHabits / totalHabits) * 100}
 					text={<tspan dominantBaseline="middle">Hoje</tspan>}
 					background
 					backgroundPadding={6}
