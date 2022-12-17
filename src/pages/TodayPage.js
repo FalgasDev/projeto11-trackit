@@ -39,6 +39,7 @@ export default function TodayPage() {
       <h1>{today}</h1>
       <p>Nenhum hábito concluído ainda</p>
       {habitsToday.map(h => <HabitsToday key={h.id} habit={h} setRefresh={setRefresh} refresh={refresh}/>)}
+      <footer></footer>
       <FooterMenu />
     </Container>
   )
@@ -61,5 +62,8 @@ const Container = styled.div`
     color: #BABABA;
     margin-top: 5px;
     margin-bottom: 28px;
+  }
+  footer{
+    height: 120px;
   }
 `

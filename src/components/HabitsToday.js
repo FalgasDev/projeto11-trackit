@@ -24,11 +24,11 @@ export default function HabitsToday({habit, refresh, setRefresh}) {
   }
 
 	return (
-		<Habit done={habit.done}>
+		<Habit done={habit.done} currentSequence={habit.currentSequence} highestSequence={habit.highestSequence}>
 			<div>
 				<h1>{habit.name}</h1>
-				<p>Sequência atual: {habit.currentSequence} dias</p>
-				<p>Seu recorde: {habit.highestSequence} dias</p>
+				<p>Sequência atual: <span>{habit.currentSequence} dias</span></p>
+				<p>Seu recorde: <span>{habit.highestSequence} dias</span></p>
 			</div>
 			<button onClick={check}>
 				<img src={success} alt="" />
@@ -55,9 +55,19 @@ const Habit = styled.div`
       color: #666666;
       margin-bottom: 7px;
     }
-    p{
+    p:nth-child(2){
       font-size: 13px;
       color: #666666;
+      span{
+        color: ${props => props.done ? '#8FC549' : '#666666'};
+      }
+    }
+    p:nth-child(3){
+      font-size: 13px;
+      color: #666666;
+      span{
+        color: ${props => props.done && props.highestSequence === props.currentSequence ? '#8FC549' : '#666666'}
+      }
     }
   }
   button{
