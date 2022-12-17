@@ -4,6 +4,7 @@ import RegisterPage from './pages/RegisterPage';
 import AuthProvider from './AuthContext';
 import TodayPage from './pages/TodayPage';
 import HabitsPage from './pages/HabitsPage';
+import HistoricPage from './pages/HistoricPage';
 
 function App() {
 	return (
@@ -12,8 +13,9 @@ function App() {
 				<Routes>
 					<Route path="/" element={<LoginPage />} />
 					<Route path="/cadastro" element={<RegisterPage />} />
-					<Route path='/hoje' element={<TodayPage />}/>
-					<Route path='/habitos' element={<HabitsPage />}/>
+					<Route path='/hoje' element={<TodayPage />} />
+					<Route path='/habitos' element={<HabitsPage />} />
+					<Route path='/historico' element={<HistoricPage />} />
 				</Routes>
 			</BrowserRouter>
 		</AuthProvider>
