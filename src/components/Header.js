@@ -1,9 +1,7 @@
-import { useContext } from "react"
 import styled from "styled-components"
-import { AuthContext } from "../AuthContext"
 
 export default function Header() {
-  const {image} = useContext(AuthContext)
+  const image = localStorage.getItem('Image')
 
   return (
     <HeaderContainer>
