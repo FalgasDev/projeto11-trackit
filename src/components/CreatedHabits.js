@@ -21,22 +21,27 @@ export default function CreatedHabits({ habit, habitDelete, setHabitDelete }) {
 	}
 
 	return (
-		<CreatedHabitsStyled>
-			<p>{habit.name}</p>
+		<CreatedHabitsStyled data-test="habit-container">
+			<p data-test="habit-name">{habit.name}</p>
 			<div>
 				{weekdays.map((w, index) =>
 					habit.days.includes(index) ? (
-						<DaysButton key={index} selected={true}>
+						<DaysButton data-test="habit-day" key={index} selected={true}>
 							{w[0]}
 						</DaysButton>
 					) : (
-						<DaysButton key={index} selected={false}>
+						<DaysButton data-test="habit-day" key={index} selected={false}>
 							{w[0]}
 						</DaysButton>
 					)
 				)}
 			</div>
-			<img src={trash} alt="" onClick={deleteHabit} />
+			<img
+				data-test="habit-delete-btn"
+				src={trash}
+				alt=""
+				onClick={deleteHabit}
+			/>
 		</CreatedHabitsStyled>
 	);
 }

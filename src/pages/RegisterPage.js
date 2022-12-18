@@ -5,7 +5,7 @@ import logo from '../assets/Logo.png';
 import { Container, InputLogin } from './LoginPage';
 import { ThreeDots } from 'react-loader-spinner';
 import styled from 'styled-components';
-import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 
 export default function RegisterPage() {
 	const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function RegisterPage() {
 	const [image, setImage] = useState('');
 	const [password, setPassword] = useState('');
 	const [isRegister, setIsRegister] = useState(false);
-	const [showed, setShowed] = useState(false)
+	const [showed, setShowed] = useState(false);
 
 	function register(e) {
 		e.preventDefault();
@@ -40,6 +40,7 @@ export default function RegisterPage() {
 			<img src={logo} alt="" />
 			<form onSubmit={register}>
 				<InputLogin
+					data-test="email-input"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					type="email"
@@ -49,16 +50,22 @@ export default function RegisterPage() {
 				/>
 				<div>
 					<InputLogin
+						data-test="password-input"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
-						type={showed ? "text" : "password"}
+						type={showed ? 'text' : 'password'}
 						placeholder="senha"
 						required
 						disabled={isRegister}
 					/>
-					{showed ? <AiOutlineEye onClick={() => setShowed(!showed)}/> : <AiOutlineEyeInvisible onClick={() => setShowed(!showed)}/>}
+					{showed ? (
+						<AiOutlineEye onClick={() => setShowed(!showed)} />
+					) : (
+						<AiOutlineEyeInvisible onClick={() => setShowed(!showed)} />
+					)}
 				</div>
 				<InputLogin
+					data-test="user-name-input"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					type="text"
@@ -67,6 +74,7 @@ export default function RegisterPage() {
 					disabled={isRegister}
 				/>
 				<InputLogin
+					data-test="user-image-input"
 					value={image}
 					onChange={(e) => setImage(e.target.value)}
 					type="url"
@@ -75,6 +83,7 @@ export default function RegisterPage() {
 					disabled={isRegister}
 				/>
 				<RegisterButton
+					data-test="signup-btn"
 					register={isRegister}
 					type="submit"
 					disabled={isRegister}
@@ -82,7 +91,9 @@ export default function RegisterPage() {
 					{isRegister ? <ThreeDots color="#FFFFFF" /> : 'Cadastrar'}
 				</RegisterButton>
 			</form>
-			<p onClick={() => navigate('/')}>Já tem uma conta? Faça login!</p>
+			<p data-test="login-link" onClick={() => navigate('/')}>
+				Já tem uma conta? Faça login!
+			</p>
 		</Container>
 	);
 }

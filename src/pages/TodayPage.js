@@ -39,11 +39,11 @@ export default function TodayPage() {
 	return (
 		<Container completedHabits={completedHabits}>
 			<Header />
-			<h1>{today}</h1>
+			<h1 data-test="today">{today}</h1>
 			{completedHabits === 0 ? (
-				<p>Nenhum hábito concluído ainda</p>
+				<p data-test="today-counter">Nenhum hábito concluído ainda</p>
 			) : (
-				<p>{`${Math.round(
+				<p data-test="today-counter">{`${Math.round(
 					(completedHabits / totalHabits) * 100
 				)}% dos hábitos concluídos`}</p>
 			)}

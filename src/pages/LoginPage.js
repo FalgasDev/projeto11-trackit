@@ -44,6 +44,7 @@ export default function LoginPage() {
 			<img src={logo} alt="" />
 			<form>
 				<InputLogin
+					data-test="email-input"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					type="email"
@@ -53,6 +54,7 @@ export default function LoginPage() {
 				/>
 				<div>
 					<InputLogin
+						data-test="password-input"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						type={showed ? 'text' : 'password'}
@@ -66,11 +68,16 @@ export default function LoginPage() {
 						<AiOutlineEyeInvisible onClick={() => setShowed(!showed)} />
 					)}
 				</div>
-				<LoginButton clicked={isClicked} type="submit" disabled={isClicked}>
+				<LoginButton
+					data-test="password-input"
+					clicked={isClicked}
+					type="submit"
+					disabled={isClicked}
+				>
 					{isClicked ? <ThreeDots color="#FFFFFF" /> : 'Entrar'}
 				</LoginButton>
 			</form>
-			<p onClick={() => navigate('/cadastro')}>
+			<p data-test="signup-link" onClick={() => navigate('/cadastro')}>
 				Não tem uma conta? Cadastre-se!
 			</p>
 		</Container>

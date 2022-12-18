@@ -69,10 +69,20 @@ export default function HabitsPage() {
 			<Header />
 			<MyHabits>
 				<h1>Meus hábitos</h1>
-				<button onClick={() => setClickCreate(true)}>+</button>
+				<button
+					data-test="habit-create-btn"
+					onClick={() => setClickCreate(true)}
+				>
+					+
+				</button>
 			</MyHabits>
-			<CreateHabit isClick={clickCreate} isDisabled={isDisabled}>
+			<CreateHabit
+				data-test="habit-create-container"
+				isClick={clickCreate}
+				isDisabled={isDisabled}
+			>
 				<input
+					data-test="habit-name-input"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					placeholder="nome do hábito"
@@ -81,6 +91,7 @@ export default function HabitsPage() {
 				<div>
 					{weekdays.map((w, index) => (
 						<WeekdaysButton
+							data-test="habit-day"
 							key={index}
 							days={days}
 							index={index}
@@ -91,8 +102,18 @@ export default function HabitsPage() {
 						</WeekdaysButton>
 					))}
 				</div>
-				<p onClick={() => setClickCreate(false)}>Cancelar</p>
-				<button onClick={createHabit} disabled={isDisabled}>
+				<button
+					data-test="habit-create-cancel-btn"
+					onClick={() => setClickCreate(false)}
+					disabled={isDisabled}
+				>
+					Cancelar
+				</button>
+				<button
+					data-test="habit-create-save-btn"
+					onClick={createHabit}
+					disabled={isDisabled}
+				>
 					{isDisabled ? <ThreeDots color="#FFFFFF" width="50px" /> : 'Salvar'}
 				</button>
 			</CreateHabit>
@@ -182,14 +203,6 @@ const CreateHabit = styled.div`
 		margin-left: 19px;
 		margin-top: 8px;
 	}
-	p {
-		position: absolute;
-		bottom: 23px;
-		right: 123px;
-		font-family: 'Lexend Deca', sans-serif;
-		font-size: 16px;
-		color: #52b6ff;
-	}
 	> button {
 		font-family: 'Lexend Deca', sans-serif;
 		position: absolute;
@@ -208,6 +221,13 @@ const CreateHabit = styled.div`
 		justify-content: center;
 		padding-right: ${(props) => (props.isDisabled ? '23px' : '')};
 		padding-bottom: ${(props) => (props.isDisabled ? '8px' : '')};
+	}
+	> button:nth-child(3) {
+		right: 113px;
+		background-color: #ffffff;
+		color: #52b6ff;
+		padding-right: 0;
+		padding-bottom: 0;
 	}
 `;
 

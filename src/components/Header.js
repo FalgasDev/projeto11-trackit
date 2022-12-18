@@ -3,15 +3,15 @@ import styled from 'styled-components';
 
 export default function Header() {
 	const image = localStorage.getItem('Image');
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	function logout() {
-		localStorage.clear()
-		navigate('/')
+		localStorage.clear();
+		navigate('/');
 	}
 
 	return (
-		<HeaderContainer>
+		<HeaderContainer data-test="header">
 			<h1>TrackIt</h1>
 			<div>
 				<p onClick={logout}>Logout</p>
@@ -39,10 +39,10 @@ const HeaderContainer = styled.div`
 		font-size: 39px;
 		margin-left: 18px;
 	}
-	div{
+	div {
 		display: flex;
 		align-items: center;
-		p{
+		p {
 			margin-right: 10px;
 			font-family: 'Lexend Deca', sans-serif;
 			text-decoration: underline;
