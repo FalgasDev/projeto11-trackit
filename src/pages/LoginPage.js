@@ -4,14 +4,20 @@ import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/Logo.png';
-import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 
 export default function LoginPage() {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [isClicked, setIsClicked] = useState(false);
-	const [showed, setShowed] = useState(false)
+	const [showed, setShowed] = useState(false);
+
+	useEffect(() => {
+		if (localStorage.length !== 0) {
+			navigate('/hoje');
+		}
+	}, []);
 
 	function login(e) {
 		e.preventDefault();
@@ -49,12 +55,16 @@ export default function LoginPage() {
 					<InputLogin
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
-						type={showed ? "text" : "password"}
+						type={showed ? 'text' : 'password'}
 						placeholder="senha"
 						required
 						disabled={isClicked}
 					/>
-					{showed ? <AiOutlineEye onClick={() => setShowed(!showed)}/> : <AiOutlineEyeInvisible onClick={() => setShowed(!showed)}/>}
+					{showed ? (
+						<AiOutlineEye onClick={() => setShowed(!showed)} />
+					) : (
+						<AiOutlineEyeInvisible onClick={() => setShowed(!showed)} />
+					)}
 				</div>
 				<LoginButton clicked={isClicked} type="submit" disabled={isClicked}>
 					{isClicked ? <ThreeDots color="#FFFFFF" /> : 'Entrar'}
@@ -81,9 +91,9 @@ const Container = styled.div`
 	form {
 		display: flex;
 		flex-direction: column;
-		div{
+		div {
 			position: relative;
-			svg{
+			svg {
 				position: absolute;
 				top: 10px;
 				right: 10px;
