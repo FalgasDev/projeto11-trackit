@@ -1,15 +1,17 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/Logo.png';
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
 
 export default function LoginPage() {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [isClicked, setIsClicked] = useState(false);
+	const [showed, setShowed] = useState(false)
 
 	function login(e) {
 		e.preventDefault();
@@ -43,14 +45,17 @@ export default function LoginPage() {
 					required
 					disabled={isClicked}
 				/>
-				<InputLogin
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					type="password"
-					placeholder="senha"
-					required
-					disabled={isClicked}
-				/>
+				<div>
+					<InputLogin
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						type={showed ? "text" : "password"}
+						placeholder="senha"
+						required
+						disabled={isClicked}
+					/>
+					{showed ? <AiOutlineEye onClick={() => setShowed(!showed)}/> : <AiOutlineEyeInvisible onClick={() => setShowed(!showed)}/>}
+				</div>
 				<LoginButton clicked={isClicked} type="submit" disabled={isClicked}>
 					{isClicked ? <ThreeDots color="#FFFFFF" /> : 'Entrar'}
 				</LoginButton>
@@ -76,6 +81,16 @@ const Container = styled.div`
 	form {
 		display: flex;
 		flex-direction: column;
+		div{
+			position: relative;
+			svg{
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				font-size: 25px;
+				color: #d5d5d5;
+			}
+		}
 	}
 	p {
 		font-family: 'Lexend Deca', sans-serif;

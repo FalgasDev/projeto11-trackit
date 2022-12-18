@@ -5,6 +5,7 @@ import logo from '../assets/Logo.png';
 import { Container, InputLogin } from './LoginPage';
 import { ThreeDots } from 'react-loader-spinner';
 import styled from 'styled-components';
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
 
 export default function RegisterPage() {
 	const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function RegisterPage() {
 	const [image, setImage] = useState('');
 	const [password, setPassword] = useState('');
 	const [isRegister, setIsRegister] = useState(false);
+	const [showed, setShowed] = useState(false)
 
 	function register(e) {
 		e.preventDefault();
@@ -45,14 +47,17 @@ export default function RegisterPage() {
 					required
 					disabled={isRegister}
 				/>
-				<InputLogin
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					type="password"
-					placeholder="senha"
-					required
-					disabled={isRegister}
-				/>
+				<div>
+					<InputLogin
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						type={showed ? "text" : "password"}
+						placeholder="senha"
+						required
+						disabled={isRegister}
+					/>
+					{showed ? <AiOutlineEye onClick={() => setShowed(!showed)}/> : <AiOutlineEyeInvisible onClick={() => setShowed(!showed)}/>}
+				</div>
 				<InputLogin
 					value={name}
 					onChange={(e) => setName(e.target.value)}
