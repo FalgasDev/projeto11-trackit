@@ -77,7 +77,7 @@ export default function LoginPage() {
 					{isClicked ? <ThreeDots color="#FFFFFF" /> : 'Entrar'}
 				</LoginButton>
 			</form>
-			<p data-test="signup-link" onClick={() => navigate('/cadastro')}>
+			<p onClick={() => navigate('/cadastro')} data-test="signup-link">
 				Não tem uma conta? Cadastre-se!
 			</p>
 		</Container>
